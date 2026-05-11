@@ -42,13 +42,13 @@ main_dir_path <- ("~/curso_sits_prodes")
 dir.create("~/curso_sits_prodes/samples_path", recursive = TRUE, showWarnings = FALSE)
 
 # definição do caminho para a pasta de amostras
-samples_path <- paste0(main_dir_path,"samples_path")
+samples_path <- paste0(main_dir_path,"/samples_path")
 
 # criação de pasta de imagens locais
 dir.create("~/curso_sits_prodes/images_path", recursive = TRUE, showWarnings = FALSE)
 
 # definição do caminho para a pasta de amostras
-images_path <- paste0(main_dir_path,"images_path")
+images_path <- paste0(main_dir_path,"/images_path")
 
 ###################################### // ###################################### // ######################################
 
