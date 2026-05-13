@@ -1,176 +1,191 @@
-# 1. Instalando as bibliotecas e os pacotes:
+# Curso SITS/PRODES
+# Script 01 - Exploração de amostras temporais com o pacote SITS
+# ==============================================================================
+
+# nota: para essa aula, será utilizado o dataset "deforestation_samples_v18", que 
+
+# ==============================================================================
+# 1. Carregamento de bibliotecas
+# ==============================================================================
 
 library(sits)
 
 library(sitsdata)
-# https://github.com/e-sensing/sitsdata 
-# A sits auxiliary package that provides example datasets for testing, learning, and validating sits functions.
-# Contains ready-made data cubes and time series examples.
+# Pacote auxiliar do SITS com datasets de exemplo para testes, aprendizado e validação.
 
 library(sf)
-# https://r-spatial.github.io/sf/
-# Pacote para manipulação de dados vetoriais espaciais em R (uma alternativa moderna ao sp).
-# Permite trabalhar com shapefiles, GeoJSON e outros formatos vetoriais, além de realizar operações espaciais como interseções, buffers e transformações de projeção.
+# Pacote para manipulação de dados vetoriais espaciais em R.
 
 library(tibble)
-# https://tibble.tidyverse.org/
-# Pacote para manipulação de tabelas no formato tibble, uma versão moderna e aprimorada do data.frame.
-# Oferece melhor visualização, indexação mais clara e integração perfeita com pacotes do tidyverse.
+# Pacote para manipulação de tabelas no formato tibble.
 
 library(dplyr)
-# https://dplyr.tidyverse.org/
 # Pacote para manipulação eficiente de dados tabulares.
-# Permite realizar operações como filtrar, selecionar, modificar, resumir e agrupar de forma clara, rápida e legível.
-# Essencial para análise de dados, especialmente em fluxos de trabalho do tidyverse.
 
 library(rstac)
-# https://brazil-data-cube.github.io/rstac/
-# Pacote que permite interagir com catálogos de dados que seguem o padrão STAC (SpatioTemporal Asset Catalog).
-# Facilita buscas, filtragem e acesso a metadados e ativos (imagens, mosaicos, coleções) hospedados em catálogos STAC, como BDC, AWS, etc.
+# Pacote para interação com catálogos STAC, como o Brazil Data Cube.
 
-###################################### // ###################################### // ######################################
+# ==============================================================================
+# 2. Diretórios, pastas e caminhos
+# ==============================================================================
 
-
-rond <- samples_l8_rondonia_2bands
-library(sitsdata)
-devtools::install_github("e-sensing/sitsdata")
-
-
-# 2. Diretórios, pastas e caminhos:
-
-# criação de diretório principal
+# 2.1 Criar diretório principal do curso
 dir.create("~/curso_sits_prodes", recursive = TRUE, showWarnings = FALSE)
 
-# definição do caminho para o diretório principal
-main_dir_path <- ("~/curso_sits_prodes")
+# 2.2 Definir caminho do diretório principal
+main_dir_path <- "~/curso_sits_prodes"
 
-# criação de pasta de amostras
-dir.create("~/curso_sits_prodes/samples_path/", recursive = TRUE, showWarnings = FALSE)
+# 2.3 Criar pasta para armazenar amostras
+dir.create("~/curso_sits_prodes/samples/", recursive = TRUE, showWarnings = FALSE)
 
-# definição do caminho para a pasta de amostras
-samples_path <- paste0(main_dir_path,"/samples_path")
+# 2.4 Definir caminho da pasta de amostras
+samples_path <- paste0(main_dir_path, "/samples")
 
-# criação de pasta de imagens locais
-dir.create("~/curso_sits_prodes/images_path", recursive = TRUE, showWarnings = FALSE)
+# 2.5 Criar pasta para armazenar imagens locais
+dir.create("~/curso_sits_prodes/images", recursive = TRUE, showWarnings = FALSE)
 
-# definição do caminho para a pasta de amostras
-images_path <- paste0(main_dir_path,"/images_path")
+# 2.6 Definir caminho da pasta de imagens locais
+images_path <- paste0(main_dir_path, "/images")
 
+# 2.7 Definir caminho do arquivo de amostras:
+# este dataset está disponível em: 
+# https://www.dropbox.com/scl/fo/i59k23t3a3ur42xnxrf0t/ACNB7UgZgO9dmv8pe2UNPQY/inst/extdata/samples?rlkey=gvdctc8hmiu1947i2ysmie3st&subfolder_nav_tracking=1&st=fby4dp1u&dl=0
 
-
-###################################### // ###################################### // ######################################
-
-# caminho para acessar o dataset
+# é necessário que dado deforestation_samples_v18.rds esteja na pasta "samples_path.
 samples_rond_path <- paste0(samples_path, "/deforestation_samples_v18.rds")
 
 
-# Carregando o arquivo dataset
+# ==============================================================================
+# 3. Exploração inicial do dataset
+# ==============================================================================
+
+# 3.1 Carregar arquivo de amostras
 def_rond_samples_v18 <- readRDS(samples_rond_path)
 
-#____________________________________ /____________________________________
-
-# 6.2 Exploração do dataset
-
-### Visualização da espacialização do dataset
+# 3.2 Visualizar a distribuição espacial das amostras
 sits_view(def_rond_samples_v18)
 
-### Balanceamento e propocionalidade do dataset por classe (label)
+# 3.3 Verificar balanceamento e proporcionalidade das classes
 summary(def_rond_samples_v18)
 
-#____________________________________ /____________________________________
 
-### Visualização (print) de informações do dataset
+# ==============================================================================
+# 4. Visualização tabular do dataset
+# ==============================================================================
 
-## Exemplos:
+# 4.1 Visualizar linhas 1 a 10 e colunas 1 a 7
+print(def_rond_samples_v18)[1:10, 1:7]
 
-# Visualizando da (linha 1 até linha 10 e coluna 1 até 7)
-print(def_rond_samples_v18)[1:10 , 1:7] 
-                                
-# Visualizando as 100 primeiras linhas
-print(def_rond_samples_v18, n=100)
+# 4.2 Visualizar as 50 primeiras linhas
+print(def_rond_samples_v18, n = 50)
 
-#____________________________________ /____________________________________
 
-### Visualizando das datas que compoem a série temporal
+# ==============================================================================
+# 5. Visualização da timeline das séries temporais
+# ==============================================================================
 
-## Exemplos:
-
-# Visualizando a serie temporal completa do dataset
+# 5.1 Visualizar a timeline completa do dataset
 sits_timeline(def_rond_samples_v18)
 
-# Visualizando a primeira data da série temporal
+# 5.2 Visualizar a primeira data da série temporal
 sits_timeline(def_rond_samples_v18)[1]
 
-# Visualizando a última data da série temporal
+# 5.3 Visualizar a última data da série temporal
 
-# Quantifica a o número de datas 
-quant_datas <- length(def_rond_samples_v18) 
+# Número de datas na timeline
+quant_datas <- length(sits_timeline(def_rond_samples_v18))
 
-# Realiza o print reutilizando o numero registrado em quant_datas
+# Última data usando o índice armazenado em quant_datas
 sits_timeline(def_rond_samples_v18)[quant_datas]
 
-# ou
+# Alternativa direta
+sits_timeline(def_rond_samples_v18)[length(sits_timeline(def_rond_samples_v18))]
 
-# Encadeamento de operações para visualizar
-sits_timeline(def_rond_samples_v18)[length(def_rond_samples_v18)]
-
-#____________________________________ /____________________________________
-### Filtragem e manipulação do dataset
-
-### Filtrando sérites temporais do dataset
-def_rond_samples_v18_select <- sits_select(data = def_rond_samples_v18, 
-                                           labels = c("Clear_Cut_Bare_Soil", "Clear_Cut_Vegetation"),
-                                           bands = c("B11", "B08", "B04"),
-                                           #start_date = "2022-01-05",
-                                           #end_date = "2022-03-10"
-                                           )
+# Alternativa mais simples
+tail(sits_timeline(def_rond_samples_v18), 1)
 
 
-### Visualização espacial de amostras das classes (labels) selecionadas 
+# ==============================================================================
+# 6. Filtragem e manipulação do dataset
+# ==============================================================================
+
+# 6.1 Selecionar classes, bandas e, opcionalmente, intervalo temporal
+def_rond_samples_v18_select <- sits_select(
+  data = def_rond_samples_v18,
+  labels = c("Clear_Cut_Bare_Soil", "Clear_Cut_Vegetation"),
+  bands = c("B11", "B08", "B04")
+  # start_date = "2022-01-05",
+  # end_date   = "2022-03-10"
+)
+
+# 6.2 Visualizar espacialmente as amostras selecionadas
 sits_view(def_rond_samples_v18_select)
 
-### Bandas selecionadas
+# 6.3 Verificar bandas selecionadas
 sits_bands(def_rond_samples_v18_select)
 
-### Visualização da timeline selecionada (start e end_date)
+# 6.4 Verificar timeline do dataset selecionado
 sits_timeline(def_rond_samples_v18_select)
-  
 
-###################################### // ###################################### // ######################################
 
-# Visualização de gráficos dos padrões espectro-temporais
+# ==============================================================================
+# 7. Visualização dos padrões espectro-temporais
+# ==============================================================================
 
-# Plot das séries temporais de todas as bandas e classes (labels) do dataset.
-# Esse plot é o mais demorado pois gera o conjunto de gráficos completo (bandas x classes)
-# No exemplo do dataset avaliado: 10 bandas x 9 classes =  90 gráficos
+# 7.1 Plotar séries temporais de todas as bandas e classes
+# Este plot pode ser demorado, pois gera o conjunto completo de gráficos.
+# Exemplo: 10 bandas x 9 classes = 90 gráficos.
 plot(def_rond_samples_v18)
 
-# Plot de gráficos suavizados usando Generalized additive model (GAM)
-# Esse plot apresenta gráficos simplificados representando os padrões espectro-temporais das classes
-# Os gráficos são agrupados e simplificam a interpretação dos padrões
+# 7.2 Plotar padrões suavizados por classe usando GAM
+# A função sits_patterns() resume os padrões espectro-temporais por classe.
 plot(sits_patterns(def_rond_samples_v18))
 
-# Visualização de instância (linha) do dataset
-# Seleção da instância 5 do dataset
-def_rond_samples_v18|> slice(5)|> print() # printar informações da instância
-def_rond_samples_v18|> slice(5)|> plot()  # plot das séries temporais de cada banda da instância
 
-# Encadeamento de funções para filtragem de dataset e visualização de séries temporais
-# Exemplo 01 : 
-def_rond_samples_v18|> sits_select(bands = c("B11"),                  # seleção apenas da banda B11
-                                   labels = c("Clear_Cut_Bare_Soil"), # seleção das classes
-                                   start_date ="2022-03-05",  # "2022-01-05" (data inicial original)
-                                   end_date =  "2022-09-23",  # "2022-12-23" (data final original)
-                                   )|> plot() # encadeamento com a função plot()
+# ==============================================================================
+# 8. Visualização de uma instância específica
+# ==============================================================================
 
-# No exemplo acima foram encadeadas 2 funções apenas:
+# 8.1 Selecionar e imprimir a instância 5 do dataset
+def_rond_samples_v18 |>
+  slice(5) |>
+  print()
+
+# 8.2 Plotar as séries temporais da instância 5
+def_rond_samples_v18 |>
+  slice(5) |>
+  plot()
+
+
+# ==============================================================================
+# 9. Encadeamento de funções com pipe
+# ==============================================================================
+
+# 9.1 Exemplo 1:
+# Selecionar a banda B11, a classe Clear_Cut_Bare_Soil e um intervalo temporal.
+# Em seguida, plotar as séries temporais selecionadas.
+def_rond_samples_v18 |>
+  sits_select(
+    bands = c("B11"),
+    labels = c("Clear_Cut_Bare_Soil"),
+    start_date = "2022-03-05",
+    end_date = "2022-09-23"
+  ) |>
+  plot()
+
+# Fluxo do exemplo:
 # def_rond_samples_v18 |> sits_select() |> plot()
 
-# Exemplo02: 
-def_rond_samples_v18|> sits_select(bands = c("B11"),         # seleção apenas da banda B11
-                                   labels = c("Forest"),     # seleção das classes
-                                   start_date ="2022-03-05", # "2022-01-05" (data inicial original)
-                                   end_date =  "2022-09-23", # "2022-12-23" (data final original)
-                                   ) |> sits_patterns() |> plot() # encadeamento com a funçãosits_patterns() e plot()
 
-# def_rond_samples_v18 |> sits_select() |> sits_patterns() |> plot()
+# 9.2 Exemplo 2:
+# Selecionar a banda B11, a classe Forest e um intervalo temporal.
+# Em seguida, calcular os padrões espectro-temporais e plotar o resultado.
+def_rond_samples_v18 |>
+  sits_select(
+    bands = c("B11"),
+    labels = c("Forest"),
+    start_date = "2022-03-05",
+    end_date = "2022-09-23"
+  ) |>
+  sits_patterns() |>
+  plot()
