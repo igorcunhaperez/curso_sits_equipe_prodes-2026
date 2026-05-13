@@ -1,8 +1,12 @@
+
 # Curso SITS/PRODES
-# Script 01 - Exploração de amostras temporais com o pacote SITS
+# Aula 02 - Exploração de amostras temporais com o pacote SITS
+
 # ==============================================================================
 
-# nota: para essa aula, será utilizado o dataset "deforestation_samples_v18", que 
+# nota: Para essa aula, será utilizado o dataset Rondonia "deforestation_samples_v18", que é utilizado nos exemplos do sitsbook;
+# mais informações em 2.1 https://e-sensing.github.io/sitsbook/intro_examples.html
+
 
 # ==============================================================================
 # 1. Carregamento de bibliotecas
